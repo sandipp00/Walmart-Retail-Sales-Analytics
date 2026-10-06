@@ -16,11 +16,17 @@ df = pd.read_csv(DATA, parse_dates=["Date"])
 
 with st.sidebar:
     st.header("Filters")
-    stores = st.multiselect("Store", sorted(df["Store"].unique()), default=sorted(df["Store"].unique()))
+    store_options = sorted(df["Store"].unique())
+    selected_stores = st.multiselect("Store (optional)", store_options, default=[], help="Leave empty to include all stores.")
     years = st.multiselect("Year", sorted(df["Year"].unique()), default=sorted(df["Year"].unique()))
     holidays = st.multiselect("Holiday", sorted(df["Holiday"].unique()), default=sorted(df["Holiday"].unique()))
 
-filtered = df[df["Store"].isin(stores) & df["Year"].isin(years) & df["Holiday"].isin(holidays)].copy()
+if selected_stores:
+    store_mask = df["Store"].isin(selected_stores)
+else:
+    store_mask = pd.Series(True, index=df.index)
+
+filtered = df[store_mask & df["Year"].isin(years) & df["Holiday"].isin(holidays)].copy()
 
 if filtered.empty:
     st.warning("No records match the selected filters.")
@@ -29,13 +35,15 @@ if filtered.empty:
 total_sales = filtered["Weekly_Sales"].sum()
 avg_weekly = filtered["Weekly_Sales"].mean()
 store_count = filtered["Store"].nunique()
-holiday_share = (filtered.loc[filtered["Holiday_Flag"] == 1, "Weekly_Sales"].sum() / total_sales * 100) if total_sales else 0
+holiday_avg = filtered.loc[filtered["Holiday_Flag"] == 1, "Weekly_Sales"].mean()
+non_holiday_avg = filtered.loc[filtered["Holiday_Flag"] == 0, "Weekly_Sales"].mean()
+holiday_uplift = ((holiday_avg / non_holiday_avg) - 1) * 100 if non_holiday_avg else 0
 
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Total Sales", f"${total_sales:,.0f}")
 c2.metric("Avg Weekly Sales", f"${avg_weekly:,.0f}")
 c3.metric("Stores", f"{store_count}")
-c4.metric("Holiday Sales Share", f"{holiday_share:.1f}%")
+c4.metric("Holiday Avg Uplift", f"{holiday_uplift:+.1f}%")
 
 st.divider()
 
@@ -45,8 +53,10 @@ with left:
     fig = px.line(trend, x="Date", y="Weekly_Sales", title="Weekly Sales Trend")
     st.plotly_chart(fig, use_container_width=True)
 with right:
-    store_sales = filtered.groupby("Store", as_index=False)["Weekly_Sales"].sum().sort_values("Weekly_Sales", ascending=False)
-    fig2 = px.bar(store_sales, x="Store", y="Weekly_Sales", title="Sales by Store")
+    store_sales = (filtered.groupby("Store", as_index=False)["Weekly_Sales"].sum()
+                   .sort_values("Weekly_Sales", ascending=False).head(10)
+                   .sort_values("Weekly_Sales", ascending=True))
+    fig2 = px.bar(store_sales, x="Weekly_Sales", y="Store", orientation="h", title="Top 10 Stores by Sales")
     st.plotly_chart(fig2, use_container_width=True)
 
 left, right = st.columns(2)
