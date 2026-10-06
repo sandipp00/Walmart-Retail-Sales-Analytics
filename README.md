@@ -65,6 +65,30 @@ The script automatically ranks the forecasting approaches by MAE. After executio
 
 A separate time-aware **Random Forest Regressor** uses an 80/20 chronological split with store, holiday, weather, economic, and calendar features. Its evaluation is kept separate from the univariate time-series comparison because it uses additional explanatory variables.
 
+
+## Dashboard
+
+The Streamlit dashboard provides interactive store/year/holiday filters, sales KPIs, store rankings, seasonality analysis, and forecast evaluation.
+
+- **Live app:** https://walmart-retail-sales-analytics.streamlit.app/
+- Store selection is optional; leaving it empty includes all stores.
+- Forecast outputs are shown when the generated evaluation CSVs are present.
+
+### Verified Forecast Results
+
+The four-model comparison was executed against the repository dataset using a chronological 12-week holdout:
+
+| Model | MAE | RMSE | MAPE |
+|---|---:|---:|---:|
+| Holt-Winters | 668,758.84 | 839,173.80 | 1.44% |
+| Seasonal Naive (52) | 974,641.62 | 1,160,987.12 | 2.12% |
+| Moving Average (4) | 1,378,075.16 | 1,512,787.36 | 2.98% |
+| Naive | 1,442,375.23 | 1,969,608.58 | 3.22% |
+
+**Best model by MAE: Holt-Winters.**
+
+The dashboard was also manually verified after the final UI refinement, including the optional Store filter and Holiday Avg Uplift KPI.
+
 ## Tech Stack
 
 **Python:** Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn, Statsmodels  
