@@ -70,7 +70,7 @@ A separate time-aware **Random Forest Regressor** uses an 80/20 chronological sp
 
 The Streamlit dashboard provides interactive store/year/holiday filters, sales KPIs, store rankings, seasonality analysis, and forecast evaluation.
 
-- **Live app:** https://walmart-retail-sales-analytics.streamlit.app/
+- **Live app:** https://walmart-retail-sales-analytics-gnya4mgzakht7sxpkffv5d.streamlit.app/
 - Store selection is optional; leaving it empty includes all stores.
 - Forecast outputs are shown when the generated evaluation CSVs are present.
 
