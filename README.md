@@ -59,7 +59,7 @@ It generates:
 - `reports/forecast_model_comparison.csv`
 - `reports/forecast_holdout_results.csv`
 
-The script automatically ranks the forecasting approaches by MAE. This keeps reported results reproducible rather than hard-coding model metrics into the README.
+The script automatically ranks the forecasting approaches by MAE. After execution, the generated CSV files are available under `reports/`; model metrics are intentionally not hard-coded into the README.
 
 ### Machine-learning model
 
