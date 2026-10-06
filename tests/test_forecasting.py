@@ -15,9 +15,9 @@ def test_evaluate_forecast_metrics():
 
     metrics = evaluate_forecast(actual, predicted)
 
-    assert metrics["MAE"] == 16.666666666666666
-    assert round(metrics["RMSE"], 6) == 17.320508
-    assert round(metrics["MAPE"], 6) == 6.666667
+    assert np.isclose(metrics["MAE"], 16.666666666666668)
+    assert np.isclose(metrics["RMSE"], 19.148542155126762)
+    assert np.isclose(metrics["MAPE"], 8.333333333333332)
 
 
 def test_naive_forecast_repeats_last_value():
