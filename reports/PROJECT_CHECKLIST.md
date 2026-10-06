@@ -15,8 +15,13 @@
 - [x] DAX measures
 - [x] Streamlit application
 - [x] README
+- [x] Dashboard screenshots captured and final Streamlit UI verified
 - [x] requirements.txt
 - [x] .gitignore
 
-## Before publishing
-Run the notebooks and Python scripts, verify model metrics, build the Power BI .pbix, add dashboard screenshots, then commit and push.
+## Final verification
+- [x] `python -m pytest -q` — 12 tests passed
+- [x] `python src/forecasting.py` — four-model comparison executed successfully
+- [x] Streamlit dashboard launched and final UI manually verified
+- [x] Forecast metrics verified: Holt-Winters MAPE 1.44%, best by MAE
+- [ ] Power BI `.pbix` publication remains optional; the repository includes DAX measures and dashboard guidance.
